@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TaskType } from "./types";
+import { TasksContext, TasksDispatchContext } from "./TasksContext";
 
-export default function TaskList({
-    tasks,
-    onChangeTask,
-    onDeleteTask,
-}: {
-    tasks: TaskType[];
-    onChangeTask: (task: TaskType) => void;
-    onDeleteTask: (taskId: number) => void;
-}) {
+export default function TaskList() {
+    const tasks = useContext(TasksContext);
+    const dispatch = useContext(TasksDispatchContext);
+
+    function onChangeTask(task: TaskType) {
+        dispatch({
+            type: "change",
+            task: task,
+        });
+    }
+
+    function onDeleteTask(taskId: number) {
+        dispatch({
+            type: "delete",
+            id: taskId,
+        });
+    }
+
     return (
         <ul>
             {tasks.map((task) => (
