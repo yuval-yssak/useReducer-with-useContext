@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { TaskType } from "./types";
-import { TasksContext, TasksDispatchContext } from "./TasksContext";
+import { useTasks, useTasksDispatch } from "./TasksContext";
 
 export default function TaskList() {
-    const tasks = useContext(TasksContext);
-    const dispatch = useContext(TasksDispatchContext);
+    const tasks = useTasks();
+    const dispatch = useTasksDispatch();
 
     function onChangeTask(task: TaskType) {
         dispatch({

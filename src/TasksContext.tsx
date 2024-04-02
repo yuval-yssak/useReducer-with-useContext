@@ -1,4 +1,4 @@
-import { PropsWithChildren, createContext, useReducer } from "react";
+import { PropsWithChildren, createContext, useContext, useReducer } from "react";
 import { ActionType, TaskType } from "./types";
 
 const initialTasks: TaskType[] = [
@@ -45,4 +45,14 @@ export function TasksProvider({ children }: PropsWithChildren) {
             <TasksDispatchContext.Provider value={dispatch}>{children}</TasksDispatchContext.Provider>
         </TasksContext.Provider>
     );
+}
+
+export function useTasks() {
+    const tasks = useContext(TasksContext);
+    return tasks;
+}
+
+export function useTasksDispatch() {
+    const dispatch = useContext(TasksDispatchContext);
+    return dispatch;
 }
