@@ -1,30 +1,74 @@
 import { useState } from "react";
-import { useTasksDispatch } from "./TasksContext";
+import { TaskType } from "./types";
+import { useTasks, useTasksDispatch } from "./TasksContext";
 
-let nextId = 3;
+export default function TaskList() {
+    const tasks = useTasks();
 
-export default function AddTask() {
+    return (
+        <ul>
+            {tasks.map((task) => (
+                <li key={task.id}>
+                    <Task task={task} />
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+function Task({ task }: { task: TaskType }) {
+    const [isEditing, setIsEditing] = useState(false);
+
     const dispatch = useTasksDispatch();
 
-    function onAddTask(text: string) {
+    function onChangeTask(task: TaskType) {
         dispatch({
-            type: "add",
-            id: nextId++,
-            text: text,
+            type: "change",
+            task: task,
         });
     }
-    const [text, setText] = useState("");
-    return (
+
+    function onDeleteTask(taskId: number) {
+        dispatch({
+            type: "delete",
+            id: taskId,
+        });
+    }
+
+    const taskContent = isEditing ? (
         <>
-            <input placeholder="Add task" value={text} onChange={(e) => setText(e.target.value)} />
-            <button
-                onClick={() => {
-                    setText("");
-                    onAddTask(text);
+            <input
+                value={task.text}
+                onChange={(e) => {
+                    onChangeTask({
+                        ...task,
+                        text: e.target.value,
+                    });
                 }}
-            >
-                Add
-            </button>
+            />
+            <button onClick={() => setIsEditing(false)}>Save</button>
         </>
+    ) : (
+        <>
+            {task.text}
+            <button onClick={() => setIsEditing(true)}>Edit</button>
+        </>
+    );
+
+    return (
+        <label>
+            <input
+                type="checkbox"
+                checked={task.done}
+                onChange={(e) => {
+                    onChangeTask({
+                        ...task,
+                        done: e.target.checked,
+                    });
+                }}
+            />
+            {taskContent}
+            <button onClick={() => onDeleteTask(task.id)}>Delete</button>
+        </label>
     );
 }

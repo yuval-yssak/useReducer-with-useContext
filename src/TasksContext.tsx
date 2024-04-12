@@ -8,7 +8,7 @@ const initialTasks: TaskType[] = [
 ];
 
 export const TasksContext = createContext(initialTasks);
-export const TasksDispatchContext = createContext<(action: ActionType) => void>(() => {});
+export const TasksDispatchContext = createContext<(action: ActionType) => void>(() => { });
 
 function tasksReducer(tasks: TaskType[], action: ActionType) {
     switch (action.type) {
